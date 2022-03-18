@@ -1,17 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "$1" ]
 then
 	if [ "$2" ]
 	then
-		youtube-dl -o "$HOME/Music/$2.flv" "$1" -f bestaudio
-		ffmpeg -i "$HOME/Music/$2.flv" -acodec libmp3lame "$HOME/Music/$2.mp3"
-		rm "$HOME/Music/$2.flv"
+		youtube-dl -o "$HOME/.$2.flv" "$1" -f bestaudio
+		if [ "${1:0:1}" = "/" ]
+		then
+			ffmpeg -i "$HOME/.$2.flv" -acodec libmp3lame "$2.mp3"
+		else
+			ffmpeg -i "$HOME/.$2.flv" -acodec libmp3lame "$HOME/Music/$2.mp3"
+		fi
+		rm "$HOME/.$2.flv"
 	else
 		echo "Warn: there is no file name (file is unnamed)"
-		youtube-dl -o "$HOME/Music/unnamed.flv" "$1" -f bestaudio
-		ffmpeg -i "$HOME/Music/unnamed.flv" -acodec libmp3lame "$HOME/Music/unnamed.mp3"
-		rm "$HOME/Music/unnamed.flv"
+		youtube-dl -o "$HOME/.unnamed.flv" "$1" -f bestaudio
+		if [ "${1:0:1}" = "/" ]
+		ffmpeg -i "$HOME/.unnamed.flv" -acodec libmp3lame "$HOME/Music/unnamed.mp3"
+		rm "$HOME/.unnamed.flv"
 	fi
 else
 	echo Err: there is no link!
